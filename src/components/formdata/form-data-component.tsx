@@ -9,6 +9,7 @@ import {
 } from "@northlight/ui";
 import { useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
+import PageContainer from "../page-container";
 
 interface FormDataComponentProps {
   addFormDataToState: (formData: { name: string; score: number }) => void;
@@ -36,10 +37,7 @@ const FormDataComponent: React.FC<FormDataComponentProps> = ({
   };
 
   return (
-    <Container bgColor={"white"} rounded={15} w="100%" margin={0} padding={5}>
-      <H1 marginBottom={10} sx={{ color: "#282828" }}>
-        Formdata
-      </H1>
+    <PageContainer title="Formdata">
       <P variant="14" sx={{ color: "#282828" }} marginBottom={5}>
         Did you just nail it and score big? Share your success with us! Fill out
         this form and secure your spot on the leaderboard!
@@ -95,7 +93,7 @@ const FormDataComponent: React.FC<FormDataComponentProps> = ({
           </Button>
         </VStack>
       </Form>
-    </Container>
+    </PageContainer>
   );
 };
 
