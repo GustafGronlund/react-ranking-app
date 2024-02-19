@@ -1,7 +1,7 @@
 import React from "react";
 import { ExcelDropzone, ExcelRow } from "../../excel-dropzone.jsx";
 import { Container } from "@chakra-ui/react";
-import { H1 } from "@northlight/ui";
+import { H1, P } from "@northlight/ui";
 import { useToast } from "@chakra-ui/react";
 import PageContainer from "../page-container.js";
 
@@ -31,6 +31,11 @@ const DragAndDropComponent: React.FC<DragAndDropComponentProps> = ({
 
   return (
     <PageContainer title="Drag and Drop">
+      <P variant="14" sx={{ color: "#282828" }} marginBottom={5}>
+        Have an Excel sheet full of achievements? Drag and drop it here to
+        update your scores instantly! Your success stories contribute to the
+        leaderboard. Let the competition begin!
+      </P>
       <ExcelDropzone
         onSheetDrop={handleSheetData}
         label="Import excel file here"
