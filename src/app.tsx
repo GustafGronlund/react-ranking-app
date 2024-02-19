@@ -18,6 +18,37 @@ export default function App() {
     setActiveButton(buttonName);
   };
 
+  const updateUserAndScore = (newUser: User, newScore: Score) => {
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+    setScores((prevScores) => [...prevScores, newScore]);
+  };
+
+  const updateScore = (newScore: Score) => {
+    setScores((prevScores) => [...prevScores, newScore]);
+  };
+
+  const addFormDataToState = (formData: { name: string; score: number }) => {
+    const checkIfExistingUser = users.find(
+      (user) => user.name === formData.name
+    );
+
+    const newUser: User = {
+      _id: checkIfExistingUser ? checkIfExistingUser._id : users.length + 1,
+      name: formData.name,
+    };
+
+    const newScore: Score = {
+      userId: newUser._id,
+      score: formData.score,
+    };
+
+    setUsers((prevUsers) =>
+      checkIfExistingUser ? prevUsers : [...prevUsers, newUser]
+    );
+
+    setScores((prevScores) => [...prevScores, newScore]);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,7 +69,9 @@ export default function App() {
         {activeButton === "leaderboard" && (
           <LeaderboardComponent users={users} scores={scores} />
         )}
-        {activeButton === "form" && <FormDataComponent />}
+        {activeButton === "form" && (
+          <FormDataComponent addFormDataToState={addFormDataToState} />
+        )}
         {activeButton === "dragAndDrop" && <DragAndDropComponent />}
       </Flex>
     </Container>

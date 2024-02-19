@@ -41,6 +41,7 @@ const Navigation: React.FC<NavigationProps> = ({ onButtonClick }) => {
             setActiveButton(button.name);
             onButtonClick(button.name);
           }}
+          key={button.name}
           bg={activeButton === button.name ? "blue.50" : "transparent"}
           display="flex"
           justifyContent="flex-start"
