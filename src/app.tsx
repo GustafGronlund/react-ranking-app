@@ -1,69 +1,46 @@
-import React, { ReactNode } from 'react'
-import { Link } from '@chakra-ui/react'
-import {
-  Container,
-  Box,
-  P,
-  VStack,
-  HStack,
-  H1,
-  H2,
-} from '@northlight/ui'
-import { palette } from '@northlight/tokens'
-import { ExcelDropzone, ExcelRow } from './excel-dropzone.jsx'
+import React, { useState, useEffect } from "react";
+import { Flex } from "@chakra-ui/react";
+import { Container } from "@northlight/ui";
+import LeaderboardComponent from "./components/leaderboard/leaderboard-component";
+import FormDataComponent from "./components/formdata/form-data-component";
+import DragAndDropComponent from "./components/draganddrop/drag-and-drop-component";
+import { User, Score } from "./models/index";
+import usersData from "./users";
+import scoresData from "./scores";
+import Navigation from "./components/navigation";
 
-interface ExternalLinkProps {
-  href: string,
-  children: ReactNode,
-}
+export default function App() {
+  const [activeButton, setActiveButton] = useState<string>("leaderboard");
+  const [users, setUsers] = useState<User[]>([]);
+  const [scores, setScores] = useState<Score[]>([]);
 
-const ExternalLink = ({ href, children }: ExternalLinkProps) => <Link href={href} isExternal sx={ {color: palette.blue['500'], textDecoration: 'underline'} }>{ children }</Link>
+  const handleButtonClick = (buttonName: string) => {
+    setActiveButton(buttonName);
+  };
 
-export default function App () {
-  function handleSheetData (data: ExcelRow[]) {
-    // replace this log with actual handling of the data
-    console.log(data)
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setUsers(usersData);
+        setScores(scoresData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <Container maxW="6xl" padding="4">
-      <H1 marginBottom="4" >Mediatool exercise</H1>
-      <HStack spacing={10} align="flex-start">
-        <ExcelDropzone
-          onSheetDrop={ handleSheetData }
-          label="Import excel file here"
-        />
-        <VStack align="left">
-          <Box>
-            <H2>Initial site</H2>
-            <P>
-              Drop the excel file scores.xlsx that you will find
-              in this repo in the area to the left and watch the log output in the console.
-              We hope this is enough to get you started with the import.
-            </P>
-          </Box>
-          <Box>
-            <H2>Styling and Northlight</H2>
-            <P>
-              Styling is optional for this task and not a requirement. The styling for this app is using
-              our own library Northligth which in turn is based on Chakra UI. 
-              You <i>may</i> use it to give some style to the application but again, it is entierly optional.
-            </P>
-            <P>
-              Checkout <ExternalLink href="https://chakra-ui.com/">Chackra UI</ExternalLink> for
-              layout components such 
-              as <ExternalLink href="https://chakra-ui.com/docs/components/box">Box</ExternalLink>
-              , <ExternalLink href="https://chakra-ui.com/docs/components/stack">Stack</ExternalLink>
-              , <ExternalLink href="https://chakra-ui.com/docs/components/grid">Grid</ExternalLink>
-              , <ExternalLink href="https://chakra-ui.com/docs/components/flex">Flex</ExternalLink> and others.
-            </P>
-            <P>
-              Checkout <ExternalLink href="https://northlight.dev/">Northlight</ExternalLink> for
-              some of our components.
-            </P>
-          </Box>
-        </VStack>
-      </HStack>
+    <Container minW="100%" height="100vh" padding="5" bg={"blue.50"}>
+      <Flex direction="row" h="100%" gap={5}>
+        <Navigation onButtonClick={handleButtonClick} />
+        {activeButton === "leaderboard" && (
+          <LeaderboardComponent users={users} scores={scores} />
+        )}
+        {activeButton === "form" && <FormDataComponent />}
+        {activeButton === "dragAndDrop" && <DragAndDropComponent />}
+      </Flex>
     </Container>
-  ) 
+  );
 }
