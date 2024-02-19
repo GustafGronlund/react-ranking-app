@@ -27,6 +27,42 @@ export default function App() {
     setScores((prevScores) => [...prevScores, newScore]);
   };
 
+  const handleDragAndDropData = (data: { name: string; score: number }[]) => {
+    const updatedUsers = [...users];
+    const updatedScores = [...scores];
+
+    data.forEach((item) => {
+      const existingUserIndex = updatedUsers.findIndex(
+        (user) => user.name === item.name
+      );
+
+      if (existingUserIndex !== -1) {
+        const newScore: Score = {
+          userId: updatedUsers[existingUserIndex]._id,
+          score: item.score,
+        };
+
+        updatedScores.push(newScore);
+      } else {
+        const newUser: User = {
+          _id: updatedUsers.length + 1,
+          name: item.name,
+        };
+
+        const newScore: Score = {
+          userId: newUser._id,
+          score: item.score,
+        };
+
+        updatedUsers.push(newUser);
+        updatedScores.push(newScore);
+      }
+    });
+
+    setUsers(updatedUsers);
+    setScores(updatedScores);
+  };
+
   const addFormDataToState = (formData: { name: string; score: number }) => {
     const checkIfExistingUser = users.find(
       (user) => user.name === formData.name
@@ -72,7 +108,9 @@ export default function App() {
         {activeButton === "form" && (
           <FormDataComponent addFormDataToState={addFormDataToState} />
         )}
-        {activeButton === "dragAndDrop" && <DragAndDropComponent />}
+        {activeButton === "dragAndDrop" && (
+          <DragAndDropComponent onDrop={handleDragAndDropData} />
+        )}
       </Flex>
     </Container>
   );
