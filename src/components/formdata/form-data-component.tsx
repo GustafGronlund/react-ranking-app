@@ -70,7 +70,7 @@ const FormDataComponent: React.FC<FormDataComponentProps> = ({
           mode: "onSubmit",
         }}
         validate={validation}>
-        <VStack alignItems="end" w="100%">
+        <VStack alignItems="end" w="100%" gap={5}>
           <TextField
             name="name"
             label="Name"
