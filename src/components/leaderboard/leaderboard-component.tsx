@@ -3,6 +3,7 @@ import { User, Score } from "../../models/index";
 import { AccordionIcon, Box, Container, Flex } from "@chakra-ui/react";
 import { AccordionButton, AccordionPanel, H1, H2, P } from "@northlight/ui";
 import { Accordion, AccordionItem } from "@northlight/ui";
+import PageContainer from "../page-container";
 
 interface LeaderBoardComponentProps {
   users: User[];
@@ -32,17 +33,8 @@ const LeaderboardComponent: React.FC<LeaderBoardComponentProps> = ({
   );
 
   return (
-    <Container
-      bgColor={"white"}
-      rounded={15}
-      w="100%"
-      margin={0}
-      padding={5}
-      overflowY="scroll">
+    <PageContainer title="Leaderboard">
       <Accordion allowMultiple w={"100%"}>
-        <H1 marginBottom={10} sx={{ color: "#282828" }}>
-          Leaderboard
-        </H1>
         <Flex
           paddingX={5}
           paddingY={2}
@@ -94,7 +86,7 @@ const LeaderboardComponent: React.FC<LeaderBoardComponentProps> = ({
           </AccordionItem>
         ))}
       </Accordion>
-    </Container>
+    </PageContainer>
   );
 };
 
