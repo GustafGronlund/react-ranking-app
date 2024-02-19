@@ -32,7 +32,13 @@ const LeaderboardComponent: React.FC<LeaderBoardComponentProps> = ({
   );
 
   return (
-    <Container bgColor={"white"} rounded={15} w="100%" margin={0} padding={5}>
+    <Container
+      bgColor={"white"}
+      rounded={15}
+      w="100%"
+      margin={0}
+      padding={5}
+      overflowY="scroll">
       <Accordion allowMultiple w={"100%"}>
         <H1 marginBottom={10} sx={{ color: "#282828" }}>
           Leaderboard
