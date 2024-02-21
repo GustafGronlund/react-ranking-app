@@ -18,18 +18,13 @@ export default function App() {
     setActiveButton(buttonName);
   };
 
-  const updateUserAndScore = (newUser: User, newScore: Score) => {
-    setUsers((prevUsers) => [...prevUsers, newUser]);
-    setScores((prevScores) => [...prevScores, newScore]);
-  };
-
-  const updateScore = (newScore: Score) => {
-    setScores((prevScores) => [...prevScores, newScore]);
-  };
-
-  const handleDragAndDropData = (data: { name: string; score: number }[]) => {
-    const updatedUsers = [...users];
-    const updatedScores = [...scores];
+  const updateUserData = (
+    data: { name: string; score: number }[],
+    existingUsers: User[],
+    existingScores: Score[]
+  ) => {
+    const updatedUsers = [...existingUsers];
+    const updatedScores = [...existingScores];
 
     data.forEach((item) => {
       const existingUserIndex = updatedUsers.findIndex(
@@ -58,31 +53,22 @@ export default function App() {
         updatedScores.push(newScore);
       }
     });
+    return { updatedUsers, updatedScores };
+  };
+
+  const handleData = (
+    data: { name: string; score: number }[] | { name: string; score: number }
+  ) => {
+    let dataArray = Array.isArray(data) ? data : [data];
+
+    const { updatedUsers, updatedScores } = updateUserData(
+      dataArray,
+      users,
+      scores
+    );
 
     setUsers(updatedUsers);
     setScores(updatedScores);
-  };
-
-  const addFormDataToState = (formData: { name: string; score: number }) => {
-    const checkIfExistingUser = users.find(
-      (user) => user.name === formData.name
-    );
-
-    const newUser: User = {
-      _id: checkIfExistingUser ? checkIfExistingUser._id : users.length + 1,
-      name: formData.name,
-    };
-
-    const newScore: Score = {
-      userId: newUser._id,
-      score: formData.score,
-    };
-
-    setUsers((prevUsers) =>
-      checkIfExistingUser ? prevUsers : [...prevUsers, newUser]
-    );
-
-    setScores((prevScores) => [...prevScores, newScore]);
   };
 
   useEffect(() => {
@@ -106,10 +92,10 @@ export default function App() {
           <LeaderboardComponent users={users} scores={scores} />
         )}
         {activeButton === "form" && (
-          <FormDataComponent addFormDataToState={addFormDataToState} />
+          <FormDataComponent addFormDataToState={handleData} />
         )}
         {activeButton === "dragAndDrop" && (
-          <DragAndDropComponent onDrop={handleDragAndDropData} />
+          <DragAndDropComponent onDrop={handleData} />
         )}
       </Flex>
     </Container>
